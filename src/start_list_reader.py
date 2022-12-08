@@ -4,14 +4,18 @@ import json
 from src.PathHelper import *
 
 
-def start_list(file_name, debug):
+def start_list(file_name, options, debug):
     """
     Given a file name parses it and outputs the events and series
 
     Parameters
     ----------
-    name : string
+    file_name : string
         name of the file to be processed with the ".pdf" extension included
+    options : dict
+        disctionary with options.json data
+    debug : bool
+        Flag for debbug porpouses that outputs information into Debug folder
     Returns
     ----------
     process_list_events(list_events, options) : [string]
@@ -26,9 +30,6 @@ def start_list(file_name, debug):
     text_events : [string]
         the list of strings used to output the list of events
     """
-
-    with open(P_OPTIONS + 'options.json') as options_json:
-        options = json.load(options_json)
 
     file = open(P_PDFS + file_name, 'rb')
     
@@ -55,7 +56,7 @@ def start_list(file_name, debug):
     events = events[1:]
 
     if debug:
-        file = open(P_DEBUG + "pdf_after_split_event.txt", "w")
+        file = open(P_DEBUG + "pdf_after_split_event.log", "w")
         for text in events:
             file.write(text)
             file.write("\n")
@@ -90,12 +91,12 @@ def start_list(file_name, debug):
                     series[i][j] = series[i][j][0:position]
 
     if debug:
-        file = open(P_DEBUG + "pdf_list_events.txt", "w")
+        file = open(P_DEBUG + "pdf_list_events.log", "w")
         for text in list_events:
             file.write(text)
             file.write("\n")
         file.close()
-        file = open(P_DEBUG + "pdf_series.txt", "w")
+        file = open(P_DEBUG + "pdf_series.log", "w")
         i = 0
         for array1 in series:
             file.write("Serie " + str(i) + ":")

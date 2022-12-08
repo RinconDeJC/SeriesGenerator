@@ -8,7 +8,7 @@ import json
 
 import os
 
-def chec_directories(options):
+def check_directories(options, pdf):
     """
     Checks that certains directories exist. The directories it cheks are 
     defined in PathHelper.py, while the file names are defined in 
@@ -48,23 +48,20 @@ def chec_directories(options):
         print(P_RESOURCES + " directory missing. Please create it as README suggests.")
     if not os.path.isdir(P_FONTS):
         correct = False
-        print(P_RESOURCES + " directory missing. Please create it as README suggests.")
+        print(P_FONTS + " directory missing. Please create it as README suggests.")
     if not os.path.isdir(P_IMAGES):
         correct = False
-        print(P_RESOURCES + " directory missing. Please create it as README suggests.")
+        print(P_IMAGES + " directory missing. Please create it as README suggests.")
     if not os.path.isdir(P_PDFS):
         correct = False
-        print(P_RESOURCES + " directory missing. Please create it as README suggests.")
-    if not os.path.isdir(P_OPTIONS):
-        correct = False
-        print(P_RESOURCES + " directory missing. Please create it as README suggests.")
+        print(P_PDFS + " directory missing. Please create it as README suggests.")
     if not correct:
         exit(1)
     
     # Mandatory files checking
-    if not os.path.isfile(P_PDFS + options["file_name"]):
+    if not os.path.isfile(P_PDFS + pdf):
         correct = False
-        print(P_PDFS + options["file_name"] + " file missing. Please create it as README suggests.")
+        print(P_PDFS + pdf + " file missing. Please create it as README suggests.")
     if not os.path.isfile(P_IMAGES + options["base_image"]):
         correct = False
         print(P_IMAGES + options["base_image"] + " file missing. Please create it as README suggests.")
@@ -96,12 +93,22 @@ def execute(name="", debug=False):
     -------
     Hopefully no errors
     """
+    if not os.path.isdir(P_OPTIONS):
+        print(P_OPTIONS + " directory missing. Please create it as README suggests.")
+        exit(1)
+    if not os.path.isfile(P_PDFS + "options.json"):
+        print(P_OPTIONS + "options.json file missing. Please create it as README suggests.")
+        exit(2)    
     with open(P_OPTIONS + 'options.json') as options_json:
         options = json.load(options_json)
+
     if name == "":
         file_name = options["file_name"]
     else:
         file_name = name + ".pdf"
+
+    check_directories(options, file_name)
+
     redo_parse = False
     try:
         with open(P_PDFS + 'intermedio.json') as aux_json:
@@ -117,7 +124,7 @@ def execute(name="", debug=False):
 
     if redo_parse:
         # parse file
-        pruebas, series,_,_ = start_list(file_name, debug)
+        pruebas, series,_,_ = start_list(file_name, options, debug)
 
         # create json and save
         json_data = {"parsed_pdf": file_name, "pruebas": pruebas, "series": series}
@@ -132,7 +139,7 @@ def debug_parse(input_file, output_file):
     Outputs the text used before parsing swimmers and events into two .txt files
     whose names start with output_file in the Debug folder.
     This function is meant to be used in a python interactive console or to simply 
-    check with the heck things are going sideways with the parsing
+    check with the heck things are going sideways with the parsing.
     
     To recover original objects:
         Events:
@@ -154,7 +161,16 @@ def debug_parse(input_file, output_file):
     ----------
     Hopefully no errors
     """
-    _,_,text_events,text_series = start_list(input_file + ".pdf", True)
+    if not os.path.isdir(P_OPTIONS):
+        print(P_OPTIONS + " directory missing. Please create it as README suggests.")
+        exit(1)
+    if not os.path.isfile(P_PDFS + "options.json"):
+        print(P_OPTIONS + "options.json file missing. Please create it as README suggests.")
+        exit(2)    
+    with open(P_OPTIONS + 'options.json') as options_json:
+        options = json.load(options_json)
+
+    _,_,text_events,text_series = start_list(input_file + ".pdf", options, True)
     with open(P_DEBUG + output_file + "_events.txt", "w", encoding="utf8") as file:
         for line in text_events:
             file.write(line)
@@ -174,6 +190,12 @@ def generate_from_manual_txt(file_name):
     manually and then call this function the same way. This way, one is able 
     to fix reading errors manually in times of need. I hope you won't need it
     """
+    if not os.path.isdir(P_OPTIONS):
+        print(P_OPTIONS + " directory missing. Please create it as README suggests.")
+        exit(1)
+    if not os.path.isfile(P_PDFS + "options.json"):
+        print(P_OPTIONS + "options.json file missing. Please create it as README suggests.")
+        exit(2) 
     with open(P_OPTIONS + 'options.json') as options_json:
         options = json.load(options_json)
     with open(P_DEBUG + file_name + '_events.txt', encoding="utf8") as events_text:

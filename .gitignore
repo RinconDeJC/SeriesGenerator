@@ -8,6 +8,7 @@ intermedio.json
 !lmmonocaps10-regular.otf
 # !options.json
 *.txt
+*.log
 # Images
 *.png
 *.jpg
