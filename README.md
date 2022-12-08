@@ -72,4 +72,4 @@ inside the code or, simply, by trial and error manipulation.
 All of the image generation process is done to fit the 
 base image. You can modifie it in any way you want, and if you need
 the original .svg file from wich it was exported it can be provided asking
-at [jcdiaz.lasenda@gmail.com](jcdiaz.lasenda@gmail.com)
+at [jcdiaz.lasenda@gmail.com](mailto:jcdiaz.lasenda@gmail.com)
