@@ -4,7 +4,7 @@
     "until_end": true,
     "end": 14
   },
-  "file_name": "trofeo22",
+  "file_name": "trofeo22.pdf",
   "competition_data": {
     "styles": [
       "Estilos",
@@ -41,9 +41,25 @@
     "comment_eol_trash4":
       "o una prueba de una nadador.",
     "EVENT_SPLITTER": "Prueba",
-    "SERIES_SPLITTER":  "Serie",
+    "SERIES_SPLITTER": "Serie",
     "Fem_UPPER": "FEM",
     "Masc_UPPER": "MASC",
     "comment5": "Los campos de arriba indican, en masyuculas, como aparecen los sexos indicados en el pdf"
+  },
+  "image_generation" : {
+    "font_file" : "lmmonocaps10-regular.otf",  
+    "base_image": "MarcoSeries.png",
+    "BIG_FONT_SIZE" : 40,
+    "MEDIUM_FONT_SIZE" : 32,
+    "SMALL_FONT_SIZE" : 28,
+    "RACE_NAME_X" : 200,
+    "RACE_NAME_Y" : 507,
+    "RACE_NAME_CH_LENGTH" : 16,
+    "LANE_X" : 95,
+    "START_LANE_Y" : 45,
+    "SWIMMER_X" : 160,
+    "START_SWIMMER_Y" : 53,
+    "LANE_HEIGHT" : 66,
+    "IMAGES_PER_FOLDER" : 20
   }
 }

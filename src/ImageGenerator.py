@@ -4,40 +4,16 @@ import os
 
 from src.PathHelper import *
 
-# constants
-FONT_FILE = "lmmonocaps10-regular.otf"
-BIG_FONT_SIZE = 40
-MEDIUM_FONT_SIZE = 32
-SMALL_FONT_SIZE = 28
-
-# coordinates
-RACE_NAME_X = 200
-RACE_NAME_Y = 507
-RACE_NAME_CH_LENGTH = 16
-
-LANE_X = 95
-START_LANE_Y = 45
-
-SWIMMER_X = 160
-START_SWIMMER_Y = 53
-
-LANE_HEIGHT = 66
-
-
-IMAGES_PER_FOLDER = 20
-
-
-def generate_images(pruebas, series, debug):
-
+def generate_images(pruebas, series, options, debug):
+    IG_data = options["image_generation"]
     # original image over which we write, only needed for size
-    base = Image.open(P_IMAGES + "MarcoSeries.png").convert("RGBA")
-
-    b_fnt = ImageFont.truetype(P_FONTS + FONT_FILE, BIG_FONT_SIZE)
-    m_fnt = ImageFont.truetype(P_FONTS + FONT_FILE, MEDIUM_FONT_SIZE)
-    s_fnt = ImageFont.truetype(P_FONTS + FONT_FILE, SMALL_FONT_SIZE)
+    base = Image.open(P_IMAGES + IG_data["base_image"]).convert("RGBA")
+    b_fnt = ImageFont.truetype(P_FONTS + IG_data["font_file"], IG_data["BIG_FONT_SIZE"])
+    m_fnt = ImageFont.truetype(P_FONTS + IG_data["font_file"], IG_data["MEDIUM_FONT_SIZE"])
+    s_fnt = ImageFont.truetype(P_FONTS + IG_data["font_file"], IG_data["SMALL_FONT_SIZE"])
 
     prueba_index = 0
-    series_number = IMAGES_PER_FOLDER + 1
+    series_number = IG_data["IMAGES_PER_FOLDER"] + 1
     folder = 0
     for prueba in series:
         for serie in prueba:
@@ -50,23 +26,23 @@ def generate_images(pruebas, series, debug):
 
             race_name = pruebas[prueba_index]
 
-            d.text((RACE_NAME_X, RACE_NAME_Y),
-                   ' ' * int(RACE_NAME_CH_LENGTH - len(race_name) / 2) + race_name,
+            d.text((IG_data["RACE_NAME_X"], IG_data["RACE_NAME_Y"]),
+                   ' ' * int(IG_data["RACE_NAME_CH_LENGTH"] - len(race_name) / 2) + race_name,
                    font=s_fnt, fill=(255, 255, 255, 255))
 
             for lane in range(1, 7):
                 # draw lane number
-                d.text((LANE_X, START_LANE_Y + LANE_HEIGHT * lane),
+                d.text((IG_data["LANE_X"], IG_data["START_LANE_Y"] + IG_data["LANE_HEIGHT"] * lane),
                        str(lane),
                        font=b_fnt, fill=(255, 255, 255, 255))
                 # draw swimmer name
                 if serie[lane-1] is not None :
-                    d.text((SWIMMER_X, START_SWIMMER_Y + LANE_HEIGHT * lane),
+                    d.text((IG_data["SWIMMER_X"], IG_data["START_SWIMMER_Y"] + IG_data["LANE_HEIGHT"] * lane),
                            serie[lane-1]["nombre"] + " " + serie[lane-1]["apellidos"], font=m_fnt,
                            fill=(255, 255, 255, 255))
             result = Image.alpha_composite(base, image)
             series_number = series_number + 1
-            if series_number > IMAGES_PER_FOLDER:
+            if series_number > IG_data["IMAGES_PER_FOLDER"]:
                 series_number = 1
                 folder = folder + 1
                 if not os.path.exists(P_GALLERY_CHECKING + str(folder)):

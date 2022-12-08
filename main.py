@@ -5,14 +5,93 @@ from src.start_list_reader import start_list, process_list_events, process_serie
 from src.PathHelper import *
 
 import json
+
+import os
+
+def chec_directories(options):
+    """
+    Checks that certains directories exist. The directories it cheks are 
+    defined in PathHelper.py, while the file names are defined in 
+    P_OPTIONS\\options.json.
+    Some are mandatory to be already there, as one can understand that 
+    if they were not the files they must contain won't exist. If one 
+    of them is created the program will exit with error code 1.
+    These are:
+        - P_RESOURCES
+        - P_FONTS
+        - P_IMAGES
+        - P_PDFS
+        - P_OPTIONS
+    Others are not necessary to be created in advance. If they were not
+    the function will create them.
+    These are:
+        - P_GALLERY
+        - P_GALLERY_CHECKING
+        - P_DEBUG
+    The script will also issue an error code (2) if either the pdf to be parsed
+    is not in P_PDFS or the base image is not in P_IMAGES.
+
+    Parameters
+    ----------
+    options : dict
+        dictionary of options read from P_OPTIONS\\options.json
+    
+    Return
+    ----------
+    Hopefully no errors
+    
+    """
+    correct = True
+    # Mandatory direcries checking
+    if not os.path.isdir(P_RESOURCES):
+        correct = False
+        print(P_RESOURCES + " directory missing. Please create it as README suggests.")
+    if not os.path.isdir(P_FONTS):
+        correct = False
+        print(P_RESOURCES + " directory missing. Please create it as README suggests.")
+    if not os.path.isdir(P_IMAGES):
+        correct = False
+        print(P_RESOURCES + " directory missing. Please create it as README suggests.")
+    if not os.path.isdir(P_PDFS):
+        correct = False
+        print(P_RESOURCES + " directory missing. Please create it as README suggests.")
+    if not os.path.isdir(P_OPTIONS):
+        correct = False
+        print(P_RESOURCES + " directory missing. Please create it as README suggests.")
+    if not correct:
+        exit(1)
+    
+    # Mandatory files checking
+    if not os.path.isfile(P_PDFS + options["file_name"]):
+        correct = False
+        print(P_PDFS + options["file_name"] + " file missing. Please create it as README suggests.")
+    if not os.path.isfile(P_IMAGES + options["base_image"]):
+        correct = False
+        print(P_IMAGES + options["base_image"] + " file missing. Please create it as README suggests.")
+    if not correct:
+        exit(2)
+    
+    # Non mandatory directories creation
+    if not os.path.isfile(P_DEBUG):
+        os.makedirs(P_DEBUG)
+        print("Created folder : ", P_DEBUG)
+    if not os.path.isfile(P_GALLERY):
+        os.makedirs(P_GALLERY)
+        print("Created folder : ", P_GALLERY)
+    if not os.path.isfile(P_GALLERY_CHECKING):
+        os.makedirs(P_GALLERY_CHECKING)
+        print("Created folder : ", P_GALLERY_CHECKING)
+
+
 def execute(name="", debug=False):
     """
 
     Parameters
     ----------
     name : string
-        name of the file to be processed withou ".pdf". If it is "" the default
+        name of the file to be processed without ".pdf". If it is "" the default
         file in options.json will be processed.
+    
     Returns
     -------
     Hopefully no errors
@@ -22,7 +101,7 @@ def execute(name="", debug=False):
     if name == "":
         file_name = options["file_name"]
     else:
-        file_name = name
+        file_name = name + ".pdf"
     redo_parse = False
     try:
         with open(P_PDFS + 'intermedio.json') as aux_json:
@@ -38,7 +117,7 @@ def execute(name="", debug=False):
 
     if redo_parse:
         # parse file
-        pruebas, series,_,_ = start_list(file_name + ".pdf", debug)
+        pruebas, series,_,_ = start_list(file_name, debug)
 
         # create json and save
         json_data = {"parsed_pdf": file_name, "pruebas": pruebas, "series": series}
@@ -46,7 +125,7 @@ def execute(name="", debug=False):
         json.dump(json_data, save_file, indent=4, sort_keys=True)
         save_file.close()
 
-    generate_images(pruebas, series, debug)
+    generate_images(pruebas, series, options, debug)
 
 def debug_parse(input_file, output_file):
     """

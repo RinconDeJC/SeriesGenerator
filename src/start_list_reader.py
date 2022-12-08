@@ -1,19 +1,9 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Sat Mar  6 09:15:26 2021
-
-@author: sredo
-"""
-
-# pip install PyPDF2  # IMPORTANTE CARGAR EL PAQUETE ANTES DE IMPORTARLO!!!
-
 import PyPDF2 as pdf
 from math import log10, floor
 import json
 from src.PathHelper import *
 
 
-# returns list<str>, list<list<dict*>>
 def start_list(file_name, debug):
     """
     Given a file name parses it and outputs the events and series
@@ -21,10 +11,15 @@ def start_list(file_name, debug):
     Parameters
     ----------
     name : string
-        name of the file to be processed withou ".pdf"
+        name of the file to be processed with the ".pdf" extension included
     Returns
-    -------
-    TODO:
+    ----------
+    process_list_events(list_events, options) : [string]
+        Parsed and beautified list of names for the events
+    process_series(series, options) : [dict]
+        List of dictionaries with the information of the swimmers.
+        See process_swimmer() for information on the dictionary contents
+
     For debuging propouses:
     text_series : [[string]]
         the list of lists of strings used to output the series
@@ -163,15 +158,6 @@ def process_list_events(list_events, options):
     return ret_list_events
 
 
-# L_TIEMPO_RESULTADO = 11
-# L_DIGITOS_A_EDAD = 2
-# C_SEPARADOR_NOMBRE_CLUB = '-'
-# C_SEPARADOR_APELLIDOS_NOMBNRE = ','
-# S_SIN_TIEMPO = "NT"
-# S_TIEMPO_RESULTADO = "___:___.___"
-# N_CALLES = 6
-
-
 def process_series(series, options):
     """
 
@@ -218,6 +204,33 @@ def process_series(series, options):
 
 
 def process_swimmer(swimmer, options):
+    """
+    Creates a distionary with the information of the swimmer parsed 
+    and beautified. 
+    Right now (8/12/22) the club contains the part of the string
+    corresponding to the time aswell, as I have not been able 
+    to tell them appart appropietly. It is not a feature, sadly 
+    it is a bug.
+
+    Parameters
+    ----------
+    swimmer : string
+        A line where the first char is the first letter of the swimmer's
+        surname. The end of the line should be the text just before 
+        options["parsing_data"]["S_TIEMPO_RESULTADO"]
+    options : dict
+        options.json information
+    
+    Return
+    ----------
+    swimmer : dict
+        Of the form:
+            nombre : First name of swimmer (could be composed)
+            apellidos : Surnames of swimmer (could be variousa and composed)
+            year : Year of birth as a 2 digit string
+            club : Swimming club of swimmer
+            tiempo : Inscription time of swimmer for the event
+    """
     pos_separador_an = swimmer.find(options["parsing_data"]["C_SEPARADOR_APELLIDOS_NOMBRE"])
     apellidos = swimmer[0:pos_separador_an].strip()
 
@@ -254,7 +267,7 @@ def process_swimmer(swimmer, options):
                 nombre = nombre + name[0]
     # if it is still too long just trim the surnames
     if len(nombre) + len(apellidos) > options["parsing_data"]["L_MAXNAME"]:
-        #len(nombre) + len(apellido) <= options[][], so len(apellidos) <= options[][] - len(nombre)
+        #len(nombre) + len(apellido) <= options[][] iff len(apellidos) <= options[][] - len(nombre)
         options["parsing_data"]["L_MAXNAME"]
         apellidos = apellidos[:options["parsing_data"]["L_MAXNAME"] - len(nombre)]
 
@@ -263,7 +276,3 @@ def process_swimmer(swimmer, options):
 # hay bugs si no es una de las posibles pruebas especificadas
 # posiblemente si son relevos tb
 # hay bugs cuando el pdf lee espacios de mas (obviamente), pero que se le va a hacer
-
-
-
-
