@@ -1,0 +1,49 @@
+{
+  "range": {
+    "start": 1,
+    "until_end": true,
+    "end": 14
+  },
+  "file_name": "trofeo22",
+  "competition_data": {
+    "styles": [
+      "Estilos",
+      "Libre",
+      "Espalda",
+      "Braza",
+      "Mariposa"
+    ],
+    "distances": [
+      "50m",
+      "100m",
+      "200m",
+      "400m",
+      "1500m"
+    ]
+  },
+  "parsing_data": {
+    "L_MAXNAME": 30,
+    "L_TIEMPO_RESULTADO": 11,
+    "L_DIGITOS_A_EDAD": 2,
+    "C_SEPARADOR_NOMBRE_CLUB": "-",
+    "C_SEPARADOR_APELLIDOS_NOMBRE": ",",
+    "S_SIN_TIEMPO": "NT",
+    "S_TIEMPO_RESULTADO": "___:___.___",
+    "N_CALLES": 6,
+    "TRASH": true,
+    "EOL_TRASH": ["Splash Meet Manager",  "III TROFEO NADADOR TOTAL MASTER CN LEGANES", "LEGAN", "Piscina 25 metros"], 
+    "comment_eol_trash1": 
+      "Para saber que poner aqui ejecutar en Python interactivo (python -i main.py) y desde la consola:",
+    "comment_eol_trash2":
+      ">>> execute(<nombre_pdf>, True) despues ir a Debug/pdf_series y poner en la lista de EOL_TRASH",
+    "comment_eol_trash3":
+      "el inicio de una linea que no sea algo del tipo 1 de 3 marcando cuantas series son de ese evento",
+    "comment_eol_trash4":
+      "o una prueba de una nadador.",
+    "EVENT_SPLITTER": "Prueba",
+    "SERIES_SPLITTER":  "Serie",
+    "Fem_UPPER": "FEM",
+    "Masc_UPPER": "MASC",
+    "comment5": "Los campos de arriba indican, en masyuculas, como aparecen los sexos indicados en el pdf"
+  }
+}

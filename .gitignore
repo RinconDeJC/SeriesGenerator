@@ -1,3 +1,21 @@
+# Project specific files
+intermedio.json
+*.pdf
+!example.pdf
+*.TTF
+*.ttf
+*.otf
+!lmmonocaps10-regular.otf
+# !options.json
+*.txt
+# Images
+*.png
+*.jpg
+*.jpeg
+# Images exceptions
+!MarcoSeries.png
+
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
