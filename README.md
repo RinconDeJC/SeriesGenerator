@@ -66,3 +66,10 @@ will be used alongside that limits the amount of images to be loaded
 in an image slides object. The rest of the values are trial an error values
 to format the text so that it fits the base image. It is best seen its use
 inside the code or, simply, by trial and error manipulation.
+
+## Image in project
+
+All of the image generation process is done to fit the 
+base image. You can modifie it in any way you want, and if you need
+the original .svg file from wich it was exported it can be provided asking
+at [jcdiaz.lasenda@gmail.com](jcdiaz.lasenda@gmail.com)
